@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { isAuthenticated, requireAuth } from '$lib/stores/auth';
+  import { isAuthenticated, requireAuth } from '$lib/stores/auth.svelte';
   import { onMount } from 'svelte';
   import type { Snippet } from 'svelte';
   
@@ -12,6 +12,6 @@
   });
 </script>
 
-{#if isAuthenticated}
+{#if isAuthenticated()}
   {@render props.children()}
 {/if}

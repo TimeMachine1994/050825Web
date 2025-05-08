@@ -1,77 +1,4 @@
-<script>
-  import { enhance } from '$app/forms';
-  import { login } from '$lib/stores/auth';
-
-  /** @type {import('./$types').PageProps} */
-  let props = $props();
-  let { data, form } = props;
-  let redirectTo = data.redirectTo;
-
-  let email = $state('');
-  let password = $state('');
-  let isSubmitting = $state(false);
-  
-  /** @param {HTMLFormElement} formEl */
-  function submitForm(formEl) {
-    return enhance(formEl, () => {
-      isSubmitting = true;
-      return ({ result }) => {
-        isSubmitting = false;
-        
-        // If using client-side auth store instead of form actions
-        // Uncomment this to use the client-side auth store
-        /*
-        if (email && password) {
-          login({ email, password })
-            .then(() => {
-              if (redirectTo) {
-                window.location.href = redirectTo;
-              }
-            })
-            .catch(error => {
-              console.error('Login failed:', error);
-            })
-            .finally(() => {
-              isSubmitting = false;
-            });
-        }
-        */
-      };
-    });
-  }
-
-  /**
-   * Helper function to safely check for field errors
-   * @param {string} fieldName - The name of the field to check for errors
-   * @returns {string|null} The error message or null if no error
-   */
-  function getFieldError(fieldName) {
-    if (!form?.errors) return null;
-    
-    // If errors is a Record<string, string> (field errors)
-    if (typeof form.errors === 'object' && !('form' in form.errors)) {
-      // Use a safer approach without TypeScript-specific syntax
-      return form.errors[fieldName] || null;
-    }
-    
-    return null;
-  }
-
-  /**
-   * Helper function to get form-level error
-   * @returns {string|null} The form error message or null if no error
-   */
-  function getFormError() {
-    if (!form?.errors) return null;
-    
-    // If errors has a form property (general form error)
-    if (form.errors && 'form' in form.errors) {
-      return form.errors.form || null;
-    }
-    
-    return null;
-  }
-</script>
+ <script></script>
 
 <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
   <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
@@ -81,7 +8,7 @@
       </h2>
       <p class="mt-2 text-center text-sm text-gray-600">
         Or
-        <a href="/register" class="font-medium text-indigo-600 hover:text-indigo-500 transition-colors">
+        <a href="?/register" class="font-medium text-indigo-600 hover:text-indigo-500 transition-colors">
           create a new account
         </a>
       </p>
@@ -149,7 +76,7 @@
         </div>
 
         <div class="text-sm">
-          <a href="/reset-password" class="font-medium text-indigo-600 hover:text-indigo-500 transition-colors">
+          <a href="?/resetPassword" class="font-medium text-indigo-600 hover:text-indigo-500 transition-colors">
             Forgot your password?
           </a>
         </div>
@@ -159,9 +86,9 @@
         <button
           type="submit"
           class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-          disabled={isSubmitting}
+          disabled={isLoading}
         >
-          {#if isSubmitting}
+          {#if isLoading}
             Signing in...
           {:else}
             Sign in

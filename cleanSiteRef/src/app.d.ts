@@ -1,28 +1,40 @@
-// See https://svelte.dev/docs/kit/types#app.d.ts
+// See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			user?: User;
+			user?: import('$lib/api/auth').User;
+			token?: string;
 		}
-		interface PageData {
-			user?: User;
-		}
-		// interface PageState {}
+		// interface PageData {}
 		// interface Platform {}
-	}
-
-	// Import the User type from our API client
-	interface User {
-		id: number;
-		username: string;
-		email: string;
-		provider: string;
-		confirmed: boolean;
-		blocked: boolean;
-		createdAt: string;
-		updatedAt: string;
+		
+		// Define the shape of the user for authentication
+		interface User {
+			id: number;
+			username: string;
+			email: string;
+			provider: string;
+			confirmed: boolean;
+			blocked: boolean;
+			createdAt: string;
+			updatedAt: string;
+			role?: {
+				id: number;
+				name: string;
+				description: string;
+				type: string;
+			};
+		}
+		
+		// Define the shape of the authentication state
+		interface AuthState {
+			user: User | null;
+			token: string | null;
+			loading: boolean;
+			error: string | null;
+		}
 	}
 }
 

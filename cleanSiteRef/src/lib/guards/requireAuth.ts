@@ -1,6 +1,6 @@
-import { browser } from '$app/environment';
 import { redirect } from '@sveltejs/kit';
-import type { Load, LoadEvent } from '@sveltejs/kit';
+import type { Load } from '@sveltejs/kit';
+import { getToken } from '$lib/stores/auth.svelte';
 
 /**
  * Higher-order function that wraps a load function to require authentication
@@ -11,8 +11,7 @@ import type { Load, LoadEvent } from '@sveltejs/kit';
 export function requireAuth(load?: Load, redirectTo = '/login'): Load {
   return async (event) => {
     // Check if the user is authenticated
-    const token = browser ? localStorage.getItem('auth_token') : null;
-    
+    const token = getToken();
     if (!token) {
       throw redirect(302, redirectTo);
     }

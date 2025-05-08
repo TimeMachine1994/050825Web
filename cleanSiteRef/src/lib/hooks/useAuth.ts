@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 import { onMount } from 'svelte';
-import { fetchCurrentUser, isAuthenticated, currentUser } from '$lib/stores/auth';
+import { isAuthenticated, getUser, loadUser } from '$lib/stores/auth.svelte';
 
 /**
  * Hook to load the current user on component mount
@@ -8,18 +8,18 @@ import { fetchCurrentUser, isAuthenticated, currentUser } from '$lib/stores/auth
  * @returns The current authentication state
  */
 export function useAuth(options: { loadUser?: boolean } = {}) {
-  const { loadUser = true } = options;
+  const { loadUser: shouldLoadUser = true } = options;
   
-  if (browser && loadUser) {
+  if (browser && shouldLoadUser) {
     onMount(() => {
-      if (isAuthenticated && !currentUser) {
-        fetchCurrentUser();
+      if (isAuthenticated() && !getUser()) {
+        loadUser();
       }
     });
   }
   
   return {
-    isAuthenticated,
-    currentUser
+    isAuthenticated: isAuthenticated(),
+    currentUser: getUser()
   };
 }
